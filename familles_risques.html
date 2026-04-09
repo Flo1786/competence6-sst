@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les 20 familles de risques – PAD</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f7faf8; color: #1a1a1a; padding: 20px 16px 40px; }
+.container { max-width: 760px; margin: 0 auto; }
+
+/* HEADER */
+.header { text-align: center; margin-bottom: 20px; }
+.badge { display: inline-block; background: #009A44; color: white; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 10px; }
+.header h1 { font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.header p { font-size: 0.8rem; color: #666; }
+
+/* PAD BOX */
+.pad-box { background: white; border: 1px solid #d4eade; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; border-left: 4px solid #009A44; }
+.pad-title { font-size: 0.82rem; font-weight: 700; color: #009A44; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.pad-text { font-size: 0.83rem; color: #333; line-height: 1.6; }
+.pad-text strong { color: #009A44; }
+
+/* FILTRES */
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center; }
+.filter-label { font-size: 0.75rem; color: #666; font-weight: 500; margin-right: 2px; }
+.filter-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid #ccc; background: white; font-size: 0.75rem; font-weight: 500; cursor: pointer; color: #555; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+.filter-btn:hover { border-color: #009A44; color: #009A44; }
+.filter-btn.active { background: #009A44; border-color: #009A44; color: white; }
+
+/* COMPTEUR */
+.counter { font-size: 0.75rem; color: #999; margin-left: auto; }
+
+/* GRILLE */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-bottom: 20px; }
+
+/* CARTE RISQUE */
+.card {
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid transparent;
+  opacity: 0;
+  transform: scale(0.88) translateY(10px);
+  animation: popIn 0.4s forwards;
+}
+.card:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.card.hidden { display: none; }
+
+@keyframes popIn {
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.card-num { font-size: 0.65rem; font-weight: 700; opacity: 0.6; margin-bottom: 4px; letter-spacing: 0.05em; }
+.card-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+.card-name { font-size: 0.8rem; font-weight: 600; line-height: 1.3; }
+
+/* Couleurs par catégorie */
+.cat-chute    { background: #fce8e8; border-color: #f5b8b8; }
+.cat-chute .card-num, .cat-chute .card-name { color: #8b1a1a; }
+.cat-deplacement { background: #fff3e0; border-color: #ffcc80; }
+.cat-deplacement .card-num, .cat-deplacement .card-name { color: #7a4000; }
+.cat-physique { background: #e8f5e9; border-color: #a5d6a7; }
+.cat-physique .card-num, .cat-physique .card-name { color: #1b5e20; }
+.cat-chimique { background: #e8eaf6; border-color: #9fa8da; }
+.cat-chimique .card-num, .cat-chimique .card-name { color: #1a237e; }
+.cat-equipement { background: #e3f2fd; border-color: #90caf9; }
+.cat-equipement .card-num, .cat-equipement .card-name { color: #0d47a1; }
+.cat-ambiance { background: #fce4ec; border-color: #f48fb1; }
+.cat-ambiance .card-num, .cat-ambiance .card-name { color: #880e4f; }
+.cat-autre    { background: #f3e5f5; border-color: #ce93d8; }
+.cat-autre .card-num, .cat-autre .card-name { color: #4a148c; }
+
+/* LEGENDE */
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #555; }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* BTN RESET */
+.btn-reset { display: block; margin: 0 auto; padding: 9px 24px; border: 2px solid #009A44; border-radius: 8px; background: none; color: #009A44; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-reset:hover { background: #009A44; color: white; }
+
+/* DETAIL PANEL */
+.detail { background: white; border: 1px solid #d4eade; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: none; border-left: 4px solid #009A44; }
+.detail.show { display: block; animation: popIn 0.3s forwards; opacity: 0; }
+.detail-title { font-size: 1rem; font-weight: 700; color: #009A44; margin-bottom: 6px; }
+.detail-body { font-size: 0.82rem; color: #444; line-height: 1.6; }
+.detail-close { float: right; background: none; border: none; font-size: 1rem; cursor: pointer; color: #999; padding: 0 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="badge">Prévention des risques professionnels</div>
+  <h1>Les 20 familles de risques – PAD</h1>
+  <p>Le <strong>Processus d'Apparition du Dommage</strong> permet d'identifier, évaluer et corriger les risques auxquels le travailleur est exposé.</p>
+</div>
+
+<div class="pad-box">
+  <div class="pad-title">Le PAD — Processus d'Apparition du Dommage</div>
+  <div class="pad-text">
+    Concept permettant d'expliquer les différents risques auxquels le travailleur est exposé, afin d'<strong>évaluer</strong> ces risques et de mettre en place des <strong>mesures correctives</strong> adaptées.
+    <br><br>
+    Situation de travail → Danger → Risque → <strong>Dommage</strong>
+  </div>
+</div>
+
+<div class="filter-row">
+  <span class="filter-label">Filtrer :</span>
+  <button class="filter-btn active" onclick="filter('all')">Toutes (20)</button>
+  <button class="filter-btn" onclick="filter('chute')">Chutes</button>
+  <button class="filter-btn" onclick="filter('deplacement')">Déplacements</button>
+  <button class="filter-btn" onclick="filter('physique')">Physique</button>
+  <button class="filter-btn" onclick="filter('chimique')">Chimique/Bio</button>
+  <button class="filter-btn" onclick="filter('equipement')">Équipements</button>
+  <button class="filter-btn" onclick="filter('ambiance')">Ambiances</button>
+  <button class="filter-btn" onclick="filter('autre')">Autres</button>
+  <span class="counter" id="counter">20 risques</span>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#f5b8b8"></div>Chutes</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#ffcc80"></div>Déplacements</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#a5d6a7"></div>Physique</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#9fa8da"></div>Chimique/Bio</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#90caf9"></div>Équipements</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#f48fb1"></div>Ambiances</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#ce93d8"></div>Autres</div>
+</div>
+
+<div id="detail" class="detail">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div class="detail-title" id="detail-title"></div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<button class="btn-reset" onclick="filter('all')">↺ Afficher tous les risques</button>
+
+</div>
+<script>
+var risques = [
+  { n:1,  name:"Chute de plain-pied",                    cat:"chute",       icon:"🚶", detail:"Glissades, trébuchements sur surface de plain-pied. Ex : sol mouillé, encombrement, câbles." },
+  { n:2,  name:"Chute de hauteur",                        cat:"chute",       icon:"🪜", detail:"Chutes depuis une hauteur (échelle, toiture, quai). Risque grave de blessure ou décès." },
+  { n:3,  name:"Circulations internes – véhicules et engins", cat:"deplacement", icon:"🚛", detail:"Collisions entre piétons et véhicules/engins sur le site. Zones de circulation mal délimitées." },
+  { n:4,  name:"Risques routiers en mission",              cat:"deplacement", icon:"🚗", detail:"Accidents de la route lors de déplacements professionnels. 1ère cause de mortalité au travail." },
+  { n:5,  name:"Charge physique de travail",               cat:"physique",    icon:"💪", detail:"TMS, efforts excessifs, manutention manuelle. Touche particulièrement le dos et les membres supérieurs." },
+  { n:6,  name:"Manutention mécanique",                   cat:"equipement",  icon:"⚙️", detail:"Risques liés aux appareils de levage, chariots élévateurs, ponts roulants. Écrasement, renversement." },
+  { n:7,  name:"Produits chimiques, émissions et déchets", cat:"chimique",    icon:"⚗️", detail:"Exposition à des substances dangereuses : toxiques, corrosives, cancérogènes, CMR." },
+  { n:8,  name:"Agents biologiques",                      cat:"chimique",    icon:"🦠", detail:"Bactéries, virus, parasites. Risque infectieux notamment dans les secteurs de la santé et agriculture." },
+  { n:9,  name:"Équipements de travail",                  cat:"equipement",  icon:"🔧", detail:"Machines, outils, appareils. Risques de coupure, écrasement, projection, happement." },
+  { n:10, name:"Effondrements et chute d'objets",         cat:"chute",       icon:"🏗️", detail:"Chute d'objets depuis les rayonnages, effondrements de structures. Zones de stockage mal sécurisées." },
+  { n:11, name:"Bruit et nuisances sonores",              cat:"ambiance",    icon:"🔊", detail:"Exposition au bruit pouvant entraîner surdité professionnelle. Au-delà de 80 dB(A) : protection obligatoire." },
+  { n:12, name:"Ambiances thermiques",                    cat:"ambiance",    icon:"🌡️", detail:"Chaleur excessive (coup de chaleur) ou froid (hypothermie). Influence sur la vigilance et la santé." },
+  { n:13, name:"Incendie et explosion",                   cat:"autre",       icon:"🔥", detail:"Présence de matières inflammables, sources d'ignition. Risque d'incendie ou d'explosion." },
+  { n:14, name:"Électricité",                             cat:"autre",       icon:"⚡", detail:"Électrocution, brûlures électriques, incendie d'origine électrique. Habilitation électrique obligatoire." },
+  { n:15, name:"Ambiances lumineuses",                    cat:"ambiance",    icon:"💡", detail:"Éclairage insuffisant ou éblouissement pouvant entraîner fatigue visuelle, accidents." },
+  { n:16, name:"Rayonnements",                            cat:"chimique",    icon:"☢️", detail:"Rayonnements ionisants (radioactivité) ou non ionisants (UV, laser). Risques cancérogènes." },
+  { n:17, name:"Risques psychosociaux",                   cat:"physique",    icon:"🧠", detail:"Stress, burn-out, harcèlement, violence au travail. Impact sur la santé mentale et physique." },
+  { n:18, name:"Vibrations",                              cat:"ambiance",    icon:"〰️", detail:"Vibrations transmises aux membres supérieurs ou corps entier. TMS, syndrome de Raynaud." },
+  { n:19, name:"Heurt et cognement",                      cat:"chute",       icon:"🔨", detail:"Chocs contre des éléments fixes ou mobiles de l'environnement de travail. Traumatismes." },
+  { n:20, name:"Pratiques addictives",                    cat:"autre",       icon:"🚫", detail:"Alcool, drogues, médicaments au travail. Altération de la vigilance, risque d'accident accru." },
+];
+
+var currentFilter = 'all';
+
+function buildGrid() {
+  var grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  var visible = 0;
+  risques.forEach(function(r, i) {
+    var show = currentFilter === 'all' || r.cat === currentFilter;
+    if (!show) return;
+    visible++;
+    var card = document.createElement('div');
+    card.className = 'card cat-' + r.cat;
+    card.style.animationDelay = (visible * 40) + 'ms';
+    card.innerHTML = '<div class="card-num">N° ' + r.n + '</div>' +
+      '<span class="card-icon" style="font-size:20px">' + r.icon + '</span>' +
+      '<div class="card-name">' + r.name + '</div>';
+    card.onclick = function() { showDetail(r); };
+    grid.appendChild(card);
+  });
+  document.getElementById('counter').textContent = visible + ' risque' + (visible > 1 ? 's' : '');
+}
+
+function filter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+  closeDetail();
+  buildGrid();
+}
+
+function showDetail(r) {
+  document.getElementById('detail-title').textContent = 'N°' + r.n + ' — ' + r.name;
+  document.getElementById('detail-body').textContent = r.detail;
+  var d = document.getElementById('detail');
+  d.className = 'detail show';
+  d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeDetail() {
+  document.getElementById('detail').className = 'detail';
+}
+
+buildGrid();
+</script>
+</body>
+</html>
