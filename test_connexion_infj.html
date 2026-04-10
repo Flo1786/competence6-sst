@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Test de connexion — Deux INFJ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --sage: #6B8F71;
+    --sage-light: #EAF2EB;
+    --sage-mid: #C2D9C5;
+    --sage-dark: #3D5C42;
+    --ink: #1E2820;
+    --warm: #F7F4EF;
+    --muted: #7A8C7D;
+    --bg: #ffffff;
+    --border: rgba(0,0,0,0.12);
+    --border-strong: rgba(0,0,0,0.22);
+    --text-secondary: #5A6B5D;
+    --text-tertiary: #8A9E8D;
+    --success: #3D7A4A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--bg);
+    border: 1px solid var(--sage-mid);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(60,80,50,0.07);
+  }
+  .header {
+    background: var(--sage-dark);
+    padding: 2rem 2.5rem;
+  }
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--sage-mid);
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: white;
+    font-weight: 400;
+  }
+  .body { padding: 2rem 2.5rem; }
+
+  .poetic-intro {
+    border-left: 2px solid var(--sage-mid);
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .poetic-intro p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+  .name-row { display: flex; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .name-field { flex: 1; min-width: 140px; }
+  .name-field label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .name-field input {
+    width: 100%;
+    padding: 9px 13px;
+    font-size: 14px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+  }
+  .name-field input:focus { border-color: var(--sage); }
+  .start-btn {
+    padding: 11px 28px;
+    background: var(--sage-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+  .start-btn:hover { background: var(--sage); }
+
+  .step-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+  }
+  .prog-bar {
+    height: 2px;
+    background: var(--sage-mid);
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--sage-dark);
+    border-radius: 2px;
+    transition: width 0.4s;
+  }
+  .section-marker {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--sage-mid);
+    margin-bottom: 1.5rem;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+  .q-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+  .opts { display: grid; gap: 8px; }
+  .opt {
+    background: var(--bg);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.5;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .opt:hover { background: var(--sage-light); }
+  .opt.sel { background: var(--sage-light); border-color: var(--sage); }
+  .opt.sel::before { content: '— '; color: var(--sage); }
+
+  .nav-row { display: flex; justify-content: space-between; margin-top: 2rem; }
+  .nav-btn {
+    padding: 10px 20px;
+    background: var(--sage-light);
+    border: 0.5px solid var(--sage-mid);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-btn.primary {
+    background: var(--sage-dark);
+    color: white;
+    border-color: var(--sage-dark);
+  }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+  .transition-screen { text-align: center; padding: 3rem 1rem; }
+  .transition-screen p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .oracle {
+    background: var(--sage-light);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border: 0.5px solid var(--sage-mid);
+  }
+  .oracle-pct { font-size: 3.5rem; font-weight: 500; color: var(--sage-dark); line-height: 1; }
+  .oracle-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; letter-spacing: 1px; }
+  .oracle-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    color: var(--sage-dark);
+  }
+  .oracle-body {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-top: 0.8rem;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dim-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+  .dim-card {
+    border: 0.5px solid var(--sage-mid);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg);
+  }
+  .dim-name { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px; }
+  .dim-bar-bg { height: 4px; background: var(--sage-mid); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+  .dim-bar-fill { height: 100%; background: var(--sage-dark); border-radius: 2px; }
+  .dim-score-txt { font-size: 13px; color: var(--ink); font-weight: 500; }
+
+  .detail-section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--sage-mid);
+    margin: 2rem 0 1rem;
+  }
+  .detail-row { padding: 12px 0; border-bottom: 0.5px solid var(--sage-mid); }
+  .detail-q {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+  .detail-answers { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .answer-pill {
+    font-size: 12px;
+    background: var(--sage-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: var(--ink);
+    border: 0.5px solid var(--sage-mid);
+  }
+  .match-badge { font-size: 11px; color: var(--success); font-weight: 500; letter-spacing: 0.5px; }
+
+  .restart-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 0.5px solid var(--sage-mid);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .restart-btn:hover { background: var(--sage-light); }
+
+  @media (max-width: 480px) {
+    .body { padding: 1.5rem 1.2rem; }
+    .dim-row { grid-template-columns: 1fr; }
+    .name-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="header-label">Test de connexion</div>
+    <div class="header-title">Deux INFJ face à face</div>
+  </div>
+  <div class="body">
+
+    <div id="setup">
+      <div class="poetic-intro">
+        <p>Deux INFJ qui se rencontrent, c'est rare comme une éclipse. Ce test explore ce qui se passe sous la surface — les images intérieures, les silences habités, les certitudes sans mots.</p>
+      </div>
+      <div class="name-row">
+        <div class="name-field"><label>Première personne</label><input id="n1" placeholder="Ton prénom" /></div>
+        <div class="name-field"><label>Deuxième personne</label><input id="n2" placeholder="Son prénom" /></div>
+      </div>
+      <button class="start-btn" onclick="begin()">Commencer — séparément</button>
+    </div>
+
+    <div id="test" style="display:none;">
+      <div class="step-label" id="slabel"></div>
+      <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+      <div id="qzone"></div>
+      <div class="nav-row">
+        <button class="nav-btn" id="pbtn" onclick="prev()" disabled>Précédent</button>
+        <button class="nav-btn primary" id="nbtn" onclick="next()">Suivant</button>
+      </div>
+    </div>
+
+    <div id="transition" style="display:none;" class="transition-screen">
+      <p id="trans-text"></p>
+      <button class="start-btn" id="trans-btn"></button>
+    </div>
+
+    <div id="results" style="display:none;">
+      <div id="rcontent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const qs = [
+  { s: "L'espace intérieur", q: "Une image surgit en toi quand tu es seul·e et en paix.", sub: "Laquelle se rapproche le plus de ce que tu ressens ?", opts: ["Une forêt dense et silencieuse", "Une pièce avec une fenêtre sur la nuit", "Un lac immobile à l'aube", "Une lumière au bout d'un couloir"] },
+  { s: "L'espace intérieur", q: "Il y a une pensée que tu as souvent mais que tu dis rarement.", sub: "De quelle nature est-elle ?", opts: ["Une intuition sur quelqu'un", "Un pressentiment sur l'avenir", "Une vérité que personne ne semble voir", "Un doute sur toi-même"] },
+  { s: "L'espace intérieur", q: "Quand tu entres dans une pièce pleine de monde,", sub: "Que se passe-t-il en toi ?", opts: ["Tu perçois les tensions invisibles", "Tu cherches la personne qui souffre", "Tu veux repartir mais tu restes", "Tu observes avant de décider qui tu es là"] },
+  { s: "L'espace intérieur", q: "La nuit, ce qui t'empêche parfois de dormir c'est...", opts: ["Une conversation rejouée", "Une intuition qui ne s'explique pas encore", "Le sentiment d'avoir manqué quelque chose d'essentiel", "L'immensité de ce que tu ne comprends pas encore"] },
+  { s: "Ce que tu portes", q: "Tu portes souvent quelque chose pour les autres sans qu'ils le sachent.", sub: "C'est plutôt...", opts: ["Leurs douleurs non dites", "Leurs potentiels qu'ils ne voient pas", "Leurs peurs qu'ils n'admettent pas", "Leurs rêves abandonnés"] },
+  { s: "Ce que tu portes", q: "Il t'arrive de savoir comment une situation va se terminer.", sub: "Comment vis-tu cette capacité ?", opts: ["Comme un fardeau silencieux", "Comme une boussole intérieure", "Avec une certaine solitude", "Avec une paix étrange"] },
+  { s: "Ce que tu portes", q: "La phrase qui décrit le mieux ton rapport à ta propre profondeur ?", opts: ["Je suis plus vaste que ce que je montre", "Je me connais mal malgré tout", "Je suis difficile à atteindre, même pour moi", "Je cherche encore qui je suis vraiment"] },
+  { s: "Ce que tu portes", q: "Quand quelqu'un te comprend vraiment,", sub: "Ta réaction intérieure est...", opts: ["Un soulagement immense", "Une méfiance douce — vraiment ?", "Une joie mêlée de vulnérabilité", "Une certitude que ça ne durera pas"] },
+  { s: "La connexion", q: "Ce qui t'attire profondément chez l'autre, c'est...", opts: ["Sa façon de voir ce que les autres ne voient pas", "L'impression qu'il·elle parle ta langue secrète", "Sa profondeur qui n'a pas besoin de se montrer", "Sa manière d'être pleinement là"] },
+  { s: "La connexion", q: "Une connexion vraie, pour toi, ressemble à...", opts: ["Se retrouver en silence sans malaise", "Finir la pensée de l'autre", "Sentir que l'autre te voit au-delà du masque", "Avoir l'impression d'avoir toujours été liés"] },
+  { s: "La connexion", q: "Quand quelqu'un te dit exactement ce que tu pensais au même moment,", sub: "Tu penses...", opts: ["Ce n'est pas un hasard", "C'est troublant mais beau", "C'est ce que j'appelle une vraie rencontre", "Ça confirme ce que je ressentais"] },
+  { s: "Le sens", q: "Ce qui donne le plus de sens à ta vie en ce moment,", opts: ["Être utile à quelqu'un de façon invisible", "Créer quelque chose qui durera", "Comprendre pourquoi tu es là", "Aimer et être aimé·e en vérité"] },
+  { s: "Le sens", q: "Tu crois que les rencontres importantes dans ta vie sont...", opts: ["Voulues par quelque chose de plus grand", "Le fruit de qui tu es devenu·e", "Un mystère auquel tu ne résistes pas", "Un hasard que tu transformes en sens"] },
+  { s: "Le sens", q: "Ta plus grande peur intérieure serait de...", opts: ["Passer à côté de ce pour quoi tu es fait·e", "Ne jamais être vraiment connu·e", "Perdre ta profondeur en vieillissant", "Faire du mal sans le vouloir"] },
+  { s: "Le sens", q: "Si tu devais résumer ce que tu cherches dans cette vie,", opts: ["Une vérité que tu peux enfin habiter", "Un amour à la hauteur de ce que tu ressens", "Un impact silencieux mais réel", "Une paix avec ce que tu es"] }
+];
+
+let ans = { p1: Array(15).fill(null), p2: Array(15).fill(null) };
+let cp = 1, cq = 0;
+let names = { p1: '', p2: '' };
+
+function begin() {
+  names.p1 = document.getElementById('n1').value.trim() || 'Personne 1';
+  names.p2 = document.getElementById('n2').value.trim() || 'Personne 2';
+  cp = 1; cq = 0;
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('test').style.display = 'block';
+  renderQ();
+}
+
+function renderQ() {
+  const pk = 'p' + cp;
+  document.getElementById('slabel').textContent = names[pk] + '  ·  ' + (cq + 1) + ' / 15';
+  document.getElementById('pfill').style.width = Math.round((cq / 15) * 100) + '%';
+  const q = qs[cq];
+  const prev_s = cq > 0 ? qs[cq-1].s : null;
+  let h = '';
+  if (q.s !== prev_s) h += '<div class="section-marker">' + q.s + '</div>';
+  h += '<div class="q-text">' + q.q + '</div>';
+  if (q.sub) h += '<div class="q-sub">' + q.sub + '</div>';
+  h += '<div class="opts">';
+  q.opts.forEach((o, i) => {
+    const s = ans[pk][cq] === i ? ' sel' : '';
+    h += '<button class="opt' + s + '" onclick="pick(' + i + ')">' + o + '</button>';
+  });
+  h += '</div>';
+  document.getElementById('qzone').innerHTML = h;
+  document.getElementById('pbtn').disabled = cq === 0;
+  const nb = document.getElementById('nbtn');
+  if (cq === 14 && cp === 1) nb.textContent = 'Passer à ' + names.p2 + ' →';
+  else if (cq === 14 && cp === 2) nb.textContent = 'Révéler notre connexion →';
+  else nb.textContent = 'Suivant';
+}
+
+function pick(i) { ans['p' + cp][cq] = i; renderQ(); }
+
+function next() {
+  if (ans['p' + cp][cq] === null) return;
+  if (cq < 14) { cq++; renderQ(); }
+  else if (cp === 1) {
+    document.getElementById('test').style.display = 'none';
+    document.getElementById('transition').style.display = 'block';
+    document.getElementById('trans-text').textContent = names.p1 + ' a terminé. Maintenant ' + names.p2 + ' répond seul·e, sans regarder les réponses précédentes.';
+    document.getElementById('trans-btn').textContent = names.p2 + ' commence →';
+    document.getElementById('trans-btn').onclick = function() {
+      cp = 2; cq = 0;
+      document.getElementById('transition').style.display = 'none';
+      document.getElementById('test').style.display = 'block';
+      renderQ();
+    };
+  } else { showResults(); }
+}
+
+function prev() { if (cq > 0) { cq--; renderQ(); } }
+
+function showResults() {
+  document.getElementById('test').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  const dims = [
+    { name: 'Espace intérieur', range: [0,4] },
+    { name: 'Ce que vous portez', range: [4,8] },
+    { name: 'La connexion', range: [8,12] },
+    { name: 'Le sens', range: [12,15] }
+  ];
+
+  let total = 0;
+  const dscores = dims.map(d => {
+    let m = 0;
+    for (let i = d.range[0]; i < d.range[1]; i++) if (ans.p1[i] === ans.p2[i]) m++;
+    total += m;
+    return { ...d, m, t: d.range[1] - d.range[0] };
+  });
+
+  const pct = Math.round((total / 15) * 100);
+
+  const levels = [
+    { min: 80, title: 'Personnes miroirs', body: 'Ce que vous partagez dépasse la ressemblance. Vous habitez le même espace intérieur — les mêmes images, les mêmes silences, la même façon de porter le monde. Deux INFJ qui se trouvent à ce niveau de résonance, c\'est une rencontre qui ne s\'explique pas, elle se vit.' },
+    { min: 60, title: 'Résonance profonde', body: 'Vous vous reconnaissez dans l\'essentiel. Là où vos chemins divergent, c\'est probablement là que vous avez le plus à vous apporter — non pour vous compléter, mais pour vous révéler mutuellement.' },
+    { min: 40, title: 'Connivence secrète', body: 'Il y a entre vous une langue commune, même si vous l\'écrivez différemment. Les points de divergence sont des invitations — non des distances.' },
+    { min: 0, title: 'Mystère de l\'attirance', body: 'Vous partagez la nature INFJ mais vos paysages intérieurs ont pris des formes différentes. Ce que vous cherchez l\'un·e chez l\'autre est peut-être ce que vous n\'osez pas encore être.' }
+  ];
+
+  const level = levels.find(l => pct >= l.min);
+
+  let dimH = dscores.map(d => {
+    const dp = Math.round((d.m / d.t) * 100);
+    return '<div class="dim-card"><div class="dim-name">' + d.name + '</div><div class="dim-bar-bg"><div class="dim-bar-fill" style="width:' + dp + '%"></div></div><div class="dim-score-txt">' + d.m + ' / ' + d.t + '</div></div>';
+  }).join('');
+
+  let detH = '<div class="detail-section-title">Ce que vous avez dit</div>';
+  qs.forEach((q, i) => {
+    const match = ans.p1[i] === ans.p2[i];
+    detH += '<div class="detail-row"><div class="detail-q">' + q.q + '</div><div class="detail-answers"><span class="answer-pill">' + names.p1 + ' : ' + q.opts[ans.p1[i]] + '</span><span class="answer-pill">' + names.p2 + ' : ' + q.opts[ans.p2[i]] + '</span>' + (match ? '<span class="match-badge">écho</span>' : '') + '</div></div>';
+  });
+
+  document.getElementById('rcontent').innerHTML =
+    '<div class="oracle"><div class="oracle-pct">' + pct + '%</div><div class="oracle-sub">' + total + ' résonances sur 15</div><div class="oracle-title">' + level.title + '</div><div class="oracle-body">' + level.body + '</div></div>' +
+    '<div class="dim-row">' + dimH + '</div>' +
+    detH +
+    '<button class="restart-btn" onclick="location.reload()">Recommencer</button>';
+}
+</script>
+</body>
+</html>
